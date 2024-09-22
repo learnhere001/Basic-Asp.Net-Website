@@ -55,7 +55,25 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_870A4C08FA33466D91908070EDF063F5 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_69C72E7FFFF040278C0C88A990139DDF }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A5416B1AA2DF467F883FA46BACC6C936 }}
+enable-AzPSSession: true
 
+      # Azure CLI Action only supports linux self-hosted runners for now.
+      # If you want to execute the Azure CLI script on a windows self-hosted runner, you can execute it directly in `run`.
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+
+      - name: Azure PowerShell script
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            Get-AzContext
+            Get-AzResourceGroup
+            
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
